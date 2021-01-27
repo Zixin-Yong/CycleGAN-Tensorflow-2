@@ -51,14 +51,14 @@ def make_zip_dataset(A_img_paths, B_img_paths, batch_size, load_size, crop_size,
 
 def make_dataset_npy(npy_paths, batch_size):
     npy = tf.cast(np.load(npy_paths),tf.float32)
-    return tl.memory_data_batch_dataset(npy,batch_size)
+    return tl.memory_data_batch_dataset(npy,batch_size,repeat=1)
 
 def make_zip_dataset_npy(A_npy_paths, B_npy_paths, batch_size):
     A_npy = tf.cast(np.load(A_npy_paths),tf.float32)
     B_npy = tf.cast(np.load(B_npy_paths),tf.float32)
 
-    A_dataset = tl.memory_data_batch_dataset(A_npy,batch_size)
-    B_dataset = tl.memory_data_batch_dataset(B_npy,batch_size)
+    A_dataset = tl.memory_data_batch_dataset(A_npy,batch_size,repeat=1)
+    B_dataset = tl.memory_data_batch_dataset(B_npy,batch_size,repeat=1)
     
     A_B_dataset = tf.data.Dataset.zip((A_dataset, B_dataset))
     len_dataset = max(A_npy.shape[0], B_npy.shape[0]) // batch_size
