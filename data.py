@@ -49,6 +49,17 @@ def make_zip_dataset(A_img_paths, B_img_paths, batch_size, load_size, crop_size,
 
     return A_B_dataset, len_dataset
 
+def make_zip_dataset_npy(A_npy_paths, B_npy_paths, batch_size):
+    A_npy = tf.cast(np.load(A_npy_paths),tf.float32)
+    B_npy = tf.cast(np.load(B_npy_paths),tf.float32)
+
+    A_dataset = tl.memory_data_batch_dataset(A_npy,batch_size)
+    B_dataset = tl.memory_data_batch_dataset(B_npy,batch_size)
+    
+    A_B_dataset = tf.data.Dataset.zip((A_dataset, B_dataset))
+    len_dataset = max(A_npy.shape[0], B_npy.shape[0]) // batch_size
+
+    return A_B_dataset, len_dataset
 
 class ItemPool:
 
